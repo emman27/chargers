@@ -19,6 +19,7 @@ func main() {
 
 	database.AutoMigrate(&db.Update{})
 	database.AutoMigrate(&db.Charger{})
+	database.AutoMigrate(&db.User{})
 
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
