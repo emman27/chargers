@@ -6,6 +6,7 @@ import "github.com/jinzhu/gorm"
 type Update struct {
 	gorm.Model
 	UpdateID         int
+	From             int
 	Message          string
 	EditedMessage    string
 	ShippingQuery    string

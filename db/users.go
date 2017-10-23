@@ -3,6 +3,7 @@ package db
 import (
 	"github.com/jinzhu/gorm"
 	"fmt"
+	"strings"
 )
 
 // User represents an user from Telegram
@@ -17,5 +18,5 @@ type User struct {
 }
 
 func (u User) String() string {
-	return fmt.Sprintf(u.FirstName, " ", u.LastName)
+	return strings.Trim(fmt.Sprint(u.FirstName, " ", u.LastName), " ")
 }
