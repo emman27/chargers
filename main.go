@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
-	"github.com/emman27/charger/db"
+	"github.com/emman27/chargers/db"
 )
 
 func main() {
