@@ -7,32 +7,31 @@ import (
 )
 
 // SetWebhook sets the webhook to a given URL
-func SetWebhook(url string, ch chan bool) {
+func SetWebhook(url string) (bool, []error) {
 	data := map[string]string{
 		"url": url,
 	}
 
-	done := func(_ gorequest.Response, body string, errs []error) {
-		if len(errs) != 0 {
-			log.Fatal("Create webhook failed: ", errs)
-		}
-		log.Println(body)
-	}
-
-	gorequest.New().Post(baseURL+"setWebhook").
+	_, _, errs := gorequest.New().Post(baseURL+"setWebhook").
 		Set("Content-Type", "application/json").
 		Send(data).
-		End(done)
+		End()
+	if len(errs) != 0 {
+		log.Fatal("Create webhook failed: ", errs)
+		return false, errs
+	}
+	log.Println("Webhook created: " + url)
+	return true, make([]error, 0)
 }
 
 // DeleteWebhook removes the webhook from the system
-func DeleteWebhook(ch chan bool) {
+func DeleteWebhook() (bool, []error) {
 	url := baseURL + "deleteWebhook"
 	_, _, err := gorequest.New().Post(url).End()
 	if err != nil {
 		log.Fatal("Delete webhook failed: ", err)
-		ch <- false
+		return false, err
 	}
 	log.Println("Webhook deleted")
-	ch <- true
+	return true, make([]error, 0)
 }

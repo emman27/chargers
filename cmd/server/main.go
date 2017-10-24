@@ -3,9 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
@@ -25,18 +23,9 @@ func main() {
 	database.AutoMigrate(&db.Charger{})
 	database.AutoMigrate(&db.User{})
 
-	router := mux.NewRouter()
-	router.Handle("receiver", &controllers.Receiver{DB: database}).Methods("POST")
-
-	server := &http.Server{
-		Handler:      router,
-		Addr:         "0.0.0.0:8080",
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
+	http.Handle("/update", &controllers.Receiver{DB: database})
+	api.SetWebhook("https://a9178faf.ngrok.io/update")
+	defer api.DeleteWebhook()
+	log.Fatal(http.ListenAndServe(":8080", nil))
 	log.Println("Server running!")
-	api.SetWebhook("https://bot.emman.me/update", make(chan bool))
-	defer api.DeleteWebhook(make(chan bool))
-
-	log.Fatal(server.ListenAndServe())
 }
