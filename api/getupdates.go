@@ -8,28 +8,6 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
-type response struct {
-	Result []UpdateSchema
-	OK     bool
-}
-
-// UserSchema according to Telegram
-type UserSchema struct {
-	ID int
-}
-
-// MessageSchema as per Telegram
-type MessageSchema struct {
-	From UserSchema
-	Text string
-}
-
-// UpdateSchema for the update array that will be passed back
-type UpdateSchema struct {
-	Message  MessageSchema
-	UpdateID int `json:"update_id"`
-}
-
 // GetUpdates pings the telegram server for the latest updates
 func GetUpdates(ch chan []UpdateSchema) {
 	const baseURL = "https://api.telegram.org/bot359390703:AAHbvNwIrh4M97IEvbhZb1ZvBDygNs50I20/getUpdates"
@@ -44,7 +22,7 @@ func GetUpdates(ch chan []UpdateSchema) {
 	log.Println("Current latest update: ", offset)
 
 	_, body, errors := gorequest.New().Get(baseURL).End()
-	var result response
+	var result updateResponse
 	if len(errors) > 0 {
 		log.Fatal("Request failed: ", errors)
 	}
