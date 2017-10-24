@@ -9,7 +9,7 @@ import (
 func TestUser_String(t *testing.T) {
 	type fields struct {
 		Model        gorm.Model
-		UserID       string `gorm:"unique_index"`
+		UserID       int `gorm:"unique_index"`
 		IsBot        bool
 		FirstName    string
 		LastName     string
@@ -21,9 +21,9 @@ func TestUser_String(t *testing.T) {
 		fields fields
 		want   string
 	}{
-		{"First name only", fields{UserID: "1", FirstName: "Emmanuel"}, "Emmanuel"},
-		{"Last name only", fields{UserID: "2", FirstName: "Goh"}, "Goh"},
-		{"First and Last Names", fields{UserID: "3", FirstName: "Emmanuel", LastName: "Goh"}, "Emmanuel Goh"},
+		{"First name only", fields{UserID: 1, FirstName: "Emmanuel"}, "Emmanuel"},
+		{"Last name only", fields{UserID: 2, FirstName: "Goh"}, "Goh"},
+		{"First and Last Names", fields{UserID: 3, FirstName: "Emmanuel", LastName: "Goh"}, "Emmanuel Goh"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

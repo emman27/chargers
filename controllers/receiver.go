@@ -18,16 +18,29 @@ type Receiver struct {
 // Receiver receives POST request from Telegram's callbacks
 func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var update api.UpdateSchema
-	log.Println(r.Body)
 	if err := json.NewDecoder(r.Body).Decode(&update); err != nil {
 		log.Fatal("JSON decoding failed: ", err)
 	}
-	obj := db.Update{
+	upd := db.Update{
 		Message:  update.Message.Text,
 		From:     update.Message.From.ID,
 		Chat:     update.Message.Chat.ID,
 		UpdateID: update.UpdateID,
 	}
-	rcv.DB.Create(&obj)
-	api.Reply(obj.Chat, "Thanks for sending us a message! You sent us: "+obj.Message)
+	rcv.DB.Create(&upd)
+
+	var user db.User
+	rcv.DB.First(&user, "user_id = ?", upd.From)
+	if user.UserID == 0 {
+		log.Println("New user!")
+		user = db.User{
+			UserID:    update.Message.From.ID,
+			FirstName: update.Message.From.FirstName,
+			LastName:  update.Message.From.LastName,
+		}
+		rcv.DB.Create(&user)
+	}
+	log.Println(user.String(), "sent a message")
+
+	api.Reply(upd.Chat, "Thanks for sending us a message! You sent us: "+upd.Message)
 }

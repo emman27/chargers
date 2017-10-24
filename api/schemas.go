@@ -7,7 +7,9 @@ type updateResponse struct {
 
 // UserSchema according to Telegram
 type UserSchema struct {
-	ID int
+	ID        int
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 }
 
 // ChatSchema represents the Chat a messsage came from. Used to reply messages

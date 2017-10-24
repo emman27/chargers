@@ -8,4 +8,6 @@ type Charger struct {
 	Brand       string
 	ModelNumber string
 	Voltage     string
+	BelongsToID uint
+	Type        string
 }

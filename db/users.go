@@ -1,20 +1,22 @@
 package db
 
 import (
-	"github.com/jinzhu/gorm"
 	"fmt"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
 // User represents an user from Telegram
 type User struct {
 	gorm.Model
-	UserID string
-	IsBot bool
-	FirstName string
-	LastName string
-	Username string
+	UserID       int `gorm:"not null;unique_index"`
+	IsBot        bool
+	FirstName    string
+	LastName     string
+	Username     string
 	LanguageCode string
+	Chargers     []Charger `gorm:"ForeignKey:BelongsToID"`
 }
 
 func (u User) String() string {
