@@ -6,8 +6,9 @@ import "log"
 // Reply returns a chat message
 func Reply(chatID int, text string) {
 	data := map[string]interface{}{
-		"chat_id": chatID,
-		"text":    text,
+		"chat_id":    chatID,
+		"text":       text,
+		"parse_mode": "Markdown",
 	}
 	_, _, errs := gorequest.New().
 		Post(baseURL+"sendMessage").

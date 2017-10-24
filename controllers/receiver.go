@@ -32,7 +32,7 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var user db.User
 	rcv.DB.First(&user, "user_id = ?", upd.From)
 	if user.UserID == 0 {
-		log.Println("New user!")
+		go log.Println("New user!")
 		user = db.User{
 			UserID:    update.Message.From.ID,
 			FirstName: update.Message.From.FirstName,
@@ -40,7 +40,7 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		rcv.DB.Create(&user)
 	}
-	log.Println(user.String(), "sent a message")
+	go log.Println(user.String(), "sent a message:", upd.Message)
 
-	api.Reply(upd.Chat, "Thanks for sending us a message! You sent us: "+upd.Message)
+	go parseUpdate(&upd)
 }
