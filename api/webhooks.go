@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/parnurzeal/gorequest"
@@ -9,14 +8,15 @@ import (
 
 // SetWebhook sets the webhook to a given URL
 func SetWebhook(url string, ch chan bool) {
-	baseURL := "https://api.telegram.org/bot359390703:AAHbvNwIrh4M97IEvbhZb1ZvBDygNs50I20/"
-
 	data := map[string]string{
 		"url": url,
 	}
 
-	done := func(resp gorequest.Response, body string, errs []error) {
-		fmt.Println(resp.Status)
+	done := func(_ gorequest.Response, body string, errs []error) {
+		if len(errs) != 0 {
+			log.Fatal("Create webhook failed: ", errs)
+		}
+		log.Println(body)
 	}
 
 	gorequest.New().Post(baseURL+"setWebhook").
@@ -27,11 +27,12 @@ func SetWebhook(url string, ch chan bool) {
 
 // DeleteWebhook removes the webhook from the system
 func DeleteWebhook(ch chan bool) {
-	url := "https://api.telegram.org/bot359390703:AAHbvNwIrh4M97IEvbhZb1ZvBDygNs50I20/deleteWebhook"
+	url := baseURL + "deleteWebhook"
 	_, _, err := gorequest.New().Post(url).End()
 	if err != nil {
 		log.Fatal("Delete webhook failed: ", err)
 		ch <- false
 	}
+	log.Println("Webhook deleted")
 	ch <- true
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/emman27/chargers/api"
@@ -20,6 +21,14 @@ func main() {
 	go api.GetUpdates(ch)
 	results := <-ch
 	for _, result := range results {
-		database.Create(&db.Update{UpdateID: result.UpdateID, From: result.Message.From.ID, Message: result.Message.Text})
+		log.Println(result)
+		update := db.Update{
+			UpdateID: result.UpdateID,
+			From:     result.Message.From.ID,
+			Message:  result.Message.Text,
+			Chat:     result.Message.Chat.ID,
+		}
+		database.Create(&update)
+		api.Reply(update.Chat, fmt.Sprint("Thanks for sending us a message! Your message: ", update.Message))
 	}
 }

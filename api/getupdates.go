@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/jinzhu/gorm"
@@ -18,10 +19,15 @@ func GetUpdates(ch chan []UpdateSchema) {
 	}
 	defer database.Close()
 
-	offset := database.Exec("SELECT max(update_id) FROM updates;")
-	log.Println("Current latest update: ", offset)
+	type dbResult struct {
+		Max      int
+		UpdateID int
+	}
+	var queryResult dbResult
+	database.Raw("SELECT MAX(update_id) as max, update_id FROM updates").Scan(&queryResult)
+	log.Println("Current latest update: ", queryResult.Max)
 
-	_, body, errors := gorequest.New().Get(baseURL).End()
+	_, body, errors := gorequest.New().Get(baseURL).Query(fmt.Sprintf("offset=%d", queryResult.Max+1)).End()
 	var result updateResponse
 	if len(errors) > 0 {
 		log.Fatal("Request failed: ", errors)
