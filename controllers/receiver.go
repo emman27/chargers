@@ -42,5 +42,5 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	go log.Println(user.String(), "sent a message:", upd.Message)
 
-	go parseUpdate(&upd)
+	go (&Parser{rcv.DB}).parseUpdate(&upd)
 }
