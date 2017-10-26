@@ -41,5 +41,5 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		rcv.DB.Create(&user)
 	}
 	go logrus.Info(user.String(), " sent a message: ", upd.Message)
-	go parseUpdate(&upd)
+	go (&Parser{rcv.DB}).parseUpdate(&upd)
 }
