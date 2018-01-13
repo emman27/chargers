@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/emman27/chargers/api"
@@ -34,7 +33,7 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var user db.User
 	rcv.DB.First(&user, "user_id = ?", upd.From)
 	if user.UserID == 0 {
-		go log.Println("New user!")
+		go logrus.Info("New user!")
 		user = db.User{
 			UserID:    update.Message.From.ID,
 			FirstName: update.Message.From.FirstName,
@@ -42,7 +41,6 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		rcv.DB.Create(&user)
 	}
-	go log.Println(user.String(), "sent a message:", upd.Message)
-
+	go logrus.Info(user.String(), " sent a message: ", upd.Message)
 	go (&Parser{rcv.DB}).parseUpdate(&upd)
 }
