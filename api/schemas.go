@@ -36,3 +36,14 @@ type UpdateSchema struct {
 	EditedChannelPost MessageSchema `json:"edited_channel_post"`
 	UpdateID          int           `json:"update_id"`
 }
+
+// ReplyKeyboardMarkup is a custom keyboard with reply options
+type ReplyKeyboardMarkup struct {
+	Keyboard        [][]KeyboardButton `json:"keyboard"`
+	OneTimeKeyboard bool               `josn:"one_time_keyboard"`
+}
+
+// KeyboardButton is one button on a reply button
+type KeyboardButton struct {
+	Text string `json:"text"`
+}

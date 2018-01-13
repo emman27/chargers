@@ -8,6 +8,7 @@ import (
 	"github.com/emman27/chargers/api"
 	"github.com/emman27/chargers/db"
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 )
 
 // Receiver allows dependency injection for the database
@@ -19,7 +20,8 @@ type Receiver struct {
 func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var update api.UpdateSchema
 	if err := json.NewDecoder(r.Body).Decode(&update); err != nil {
-		log.Fatal("JSON decoding failed: ", err)
+		logrus.Error("JSON decoding failed: ", err, r.Body)
+		return
 	}
 	upd := db.Update{
 		Message:  update.Message.Text,

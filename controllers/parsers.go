@@ -15,7 +15,10 @@ type Parser struct{ *gorm.DB }
 func (p *Parser) parseUpdate(update *db.Update) {
 	switch arr := strings.Fields(update.Message); arr[0] {
 	case "/start", "/help":
-		go api.Reply(update.Chat, "Welcome to the Chargers Bot!\nNice to meet you!\n\n- To share a charger, type /share <product>\n- To borrow a charger, type /borrow <product>\nFor example, you can type `/share android` to share a Android charger")
+		go api.ReplyWithOptions(update.Chat, "Hello! Thank you for subscribing to Jaetaan! A platform for you to share you chargers and earn money or loan a charger for a small fee! Try it out now!", []string{
+			"Share a charger",
+			"Borrow a charger",
+		})
 	case "/borrow":
 		go api.Reply(update.Chat, "Heh this doesn't work yet")
 	case "/share":
