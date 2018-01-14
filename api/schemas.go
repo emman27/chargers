@@ -40,7 +40,7 @@ type UpdateSchema struct {
 // ReplyKeyboardMarkup is a custom keyboard with reply options
 type ReplyKeyboardMarkup struct {
 	Keyboard        [][]KeyboardButton `json:"keyboard"`
-	OneTimeKeyboard bool               `josn:"one_time_keyboard"`
+	OneTimeKeyboard bool               `json:"one_time_keyboard"`
 }
 
 // KeyboardButton is one button on a reply button
