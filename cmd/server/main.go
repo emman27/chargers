@@ -24,7 +24,7 @@ func main() {
 	database.AutoMigrate(&db.User{})
 
 	http.Handle("/update", &controllers.Receiver{DB: database})
-	api.SetWebhook("https://79dbdac5.ngrok.io/update")
+	api.SetWebhook("https://7862894c.ngrok.io/update")
 	defer api.DeleteWebhook()
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	log.Println("Server running!")
