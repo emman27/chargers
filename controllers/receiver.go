@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/emman27/chargers/api"
+	"github.com/emman27/chargers/constants"
 	"github.com/emman27/chargers/db"
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
@@ -41,6 +43,8 @@ func (rcv *Receiver) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		rcv.DB.Create(&user)
 	}
-	go logrus.Info(user.String(), " sent a message: ", upd.Message)
+	logged := fmt.Sprintf("%s (%d) sent a message: %s", user.String(), update.Message.Chat.ID, upd.Message)
+	go logrus.Info(logged)
+	go api.Reply(constants.AdminChatID, logged)
 	go (&Parser{rcv.DB}).parseUpdate(&upd)
 }

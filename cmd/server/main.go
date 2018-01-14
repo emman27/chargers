@@ -22,9 +22,10 @@ func main() {
 	database.AutoMigrate(&db.Update{})
 	database.AutoMigrate(&db.Charger{})
 	database.AutoMigrate(&db.User{})
+	database.AutoMigrate(&db.Chat{})
 
 	http.Handle("/update", &controllers.Receiver{DB: database})
-	api.SetWebhook("https://7862894c.ngrok.io/update")
+	api.SetWebhook("https://904d8327.ngrok.io/update")
 	defer api.DeleteWebhook()
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	log.Println("Server running!")
