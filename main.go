@@ -18,7 +18,8 @@ func main() {
 	redis := setupRedis()
 	logrus.Info(redis)
 	http.Handle("/update", &controllers.Receiver{DB: database})
-	api.SetWebhook("https://904d8327.ngrok.io/update")
+	api.SetWebhook("https://def2f71b.ngrok.io")
+	logrus.Info("Server starting now")
 	defer api.DeleteWebhook()
 	logrus.Fatal(http.ListenAndServe(":8080", nil))
 }

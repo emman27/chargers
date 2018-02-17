@@ -1,11 +1,13 @@
 version: '3'
 services:
   web:
-    build: .
+    image: chargers
     networks:
     - main
     ports:
     - 8080:8080
+    volumes:
+    - .:/go/src/github.com/emman27/chargers
   redis:
     image: redis:alpine
     networks:
